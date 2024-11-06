@@ -1482,7 +1482,14 @@ static void transformRecipestoEVLRecipes(VPlan &Plan, VPValue &EVL) {
                       return nullptr;
 
                     SmallVector<VPValue *> Ops(CInst->operands());
-                    Ops.push_back(&EVL);
+                    if (VPIntrinsic::getMaskParamPos(VPID)) {
+                      VPValue *Mask = Plan.getOrAddLiveIn(ConstantInt::getTrue(
+                          IntegerType::getInt1Ty(CI->getContext())));
+                      Ops.push_back(Mask);
+                    }
+                    if (VPIntrinsic::getVectorLengthParamPos(VPID)) {
+                      Ops.push_back(&EVL);
+                    }
                     return new VPWidenIntrinsicRecipe(
                         *CI, VPID, Ops, CI->getType(), CI->getDebugLoc());
                   })
