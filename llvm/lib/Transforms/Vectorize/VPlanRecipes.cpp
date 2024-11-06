@@ -948,7 +948,10 @@ void VPWidenIntrinsicRecipe::execute(VPTransformState &State) {
     // Some intrinsics have a scalar argument - don't replace it with a
     // vector.
     Value *Arg;
-    if (isVectorIntrinsicWithScalarOpAtArg(VectorIntrinsicID, I.index()))
+    if (getOperand(I.index())->isLiveIn() &&
+        getOperand(I.index())->getLiveInIRValue()->getType()->isMetadataTy())
+      Arg = getOperand(I.index())->getLiveInIRValue();
+    else if (isVectorIntrinsicWithScalarOpAtArg(VectorIntrinsicID, I.index()))
       Arg = State.get(I.value(), VPLane(0));
     else
       Arg = State.get(I.value(), onlyFirstLaneUsed(I.value()));
@@ -960,21 +963,30 @@ void VPWidenIntrinsicRecipe::execute(VPTransformState &State) {
   // Use vector version of the intrinsic.
   Module *M = State.Builder.GetInsertBlock()->getModule();
   Function *VectorF =
-      Intrinsic::getOrInsertDeclaration(M, VectorIntrinsicID, TysForDecl);
+      VPIntrinsic::isVPIntrinsic(VectorIntrinsicID)
+          ? VPIntrinsic::getOrInsertDeclarationForParams(M, VectorIntrinsicID,
+                                                         TysForDecl[0], Args)
+          : Intrinsic::getOrInsertDeclaration(M, VectorIntrinsicID, TysForDecl);
   assert(VectorF && "Can't retrieve vector intrinsic.");
 
-  auto *CI = cast_or_null<CallInst>(getUnderlyingValue());
   SmallVector<OperandBundleDef, 1> OpBundles;
-  if (CI)
+  if (getUnderlyingValue() && isa<CallInst>(getUnderlyingValue())) {
+    auto *CI = cast_or_null<CallInst>(getUnderlyingValue());
     CI->getOperandBundlesAsDefs(OpBundles);
+  }
 
-  CallInst *V = State.Builder.CreateCall(VectorF, Args, OpBundles);
+  Value *V = State.Builder.CreateCall(VectorF, Args, OpBundles);
 
-  setFlags(V);
+  if (getUnderlyingValue() && isa<Instruction>(getUnderlyingValue())) {
+    if (isa<FPMathOperator>(V))
+      setFlags(cast<Instruction>(V));
+  } else {
+    setFlags(cast<Instruction>(V));
+  }
 
   if (!V->getType()->isVoidTy())
     State.set(this, V);
-  State.addMetadata(V, CI);
+  State.addMetadata(V, dyn_cast_or_null<Instruction>(getUnderlyingValue()));
 }
 
 InstructionCost VPWidenIntrinsicRecipe::computeCost(ElementCount VF,
@@ -1023,6 +1035,18 @@ InstructionCost VPWidenIntrinsicRecipe::computeCost(ElementCount VF,
       break;
     }
     Arguments.push_back(V);
+  }
+
+  if (std::optional<unsigned> FOp =
+          VPIntrinsic::getFunctionalOpcodeForVP(VectorIntrinsicID)) {
+    if (VPCmpIntrinsic::isVPCmp(VectorIntrinsicID)) {
+      Instruction *CtxI = dyn_cast_or_null<Instruction>(getUnderlyingValue());
+      Type *VectorTy = ToVectorTy(Ctx.Types.inferScalarType(getOperand(0)), VF);
+      return Ctx.TTI.getCmpSelInstrCost(FOp.value(), VectorTy, nullptr,
+                                        getPredicate(), CostKind,
+                                        {TTI::OK_AnyValue, TTI::OP_None},
+                                        {TTI::OK_AnyValue, TTI::OP_None}, CtxI);
+    }
   }
 
   Type *RetTy = ToVectorTy(Ctx.Types.inferScalarType(this), VF);

@@ -583,9 +583,9 @@ define void @vp_lrint(ptr noalias %a, ptr noalias %b, i64 %N) {
 ; IF-EVL-NEXT:    [[TMP11:%.*]] = getelementptr inbounds float, ptr [[B]], i64 [[TMP10]]
 ; IF-EVL-NEXT:    [[TMP12:%.*]] = getelementptr inbounds float, ptr [[TMP11]], i32 0
 ; IF-EVL-NEXT:    [[VP_OP_LOAD:%.*]] = call <vscale x 4 x float> @llvm.vp.load.nxv4f32.p0(ptr align 4 [[TMP12]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
-; IF-EVL-NEXT:    [[TMP13:%.*]] = fpext <vscale x 4 x float> [[VP_OP_LOAD]] to <vscale x 4 x double>
+; IF-EVL-NEXT:    [[TMP13:%.*]] = call <vscale x 4 x double> @llvm.vp.fpext.nxv4f64.nxv4f32(<vscale x 4 x float> [[VP_OP_LOAD]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
 ; IF-EVL-NEXT:    [[TMP14:%.*]] = call <vscale x 4 x i64> @llvm.vp.lrint.nxv4i64.nxv4f64(<vscale x 4 x double> [[TMP13]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
-; IF-EVL-NEXT:    [[TMP15:%.*]] = trunc <vscale x 4 x i64> [[TMP14]] to <vscale x 4 x i32>
+; IF-EVL-NEXT:    [[TMP15:%.*]] = call <vscale x 4 x i32> @llvm.vp.trunc.nxv4i32.nxv4i64(<vscale x 4 x i64> [[TMP14]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
 ; IF-EVL-NEXT:    [[TMP16:%.*]] = getelementptr inbounds i32, ptr [[A]], i64 [[TMP10]]
 ; IF-EVL-NEXT:    [[TMP17:%.*]] = getelementptr inbounds i32, ptr [[TMP16]], i32 0
 ; IF-EVL-NEXT:    call void @llvm.vp.store.nxv4i32.p0(<vscale x 4 x i32> [[TMP15]], ptr align 4 [[TMP17]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
@@ -682,9 +682,9 @@ define void @vp_llrint(ptr noalias %a, ptr noalias %b, i64 %N) {
 ; IF-EVL-NEXT:    [[TMP11:%.*]] = getelementptr inbounds float, ptr [[B]], i64 [[TMP10]]
 ; IF-EVL-NEXT:    [[TMP12:%.*]] = getelementptr inbounds float, ptr [[TMP11]], i32 0
 ; IF-EVL-NEXT:    [[VP_OP_LOAD:%.*]] = call <vscale x 4 x float> @llvm.vp.load.nxv4f32.p0(ptr align 4 [[TMP12]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
-; IF-EVL-NEXT:    [[TMP13:%.*]] = fpext <vscale x 4 x float> [[VP_OP_LOAD]] to <vscale x 4 x double>
+; IF-EVL-NEXT:    [[TMP13:%.*]] = call <vscale x 4 x double> @llvm.vp.fpext.nxv4f64.nxv4f32(<vscale x 4 x float> [[VP_OP_LOAD]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
 ; IF-EVL-NEXT:    [[TMP14:%.*]] = call <vscale x 4 x i64> @llvm.vp.llrint.nxv4i64.nxv4f64(<vscale x 4 x double> [[TMP13]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
-; IF-EVL-NEXT:    [[TMP15:%.*]] = trunc <vscale x 4 x i64> [[TMP14]] to <vscale x 4 x i32>
+; IF-EVL-NEXT:    [[TMP15:%.*]] = call <vscale x 4 x i32> @llvm.vp.trunc.nxv4i32.nxv4i64(<vscale x 4 x i64> [[TMP14]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
 ; IF-EVL-NEXT:    [[TMP16:%.*]] = getelementptr inbounds i32, ptr [[A]], i64 [[TMP10]]
 ; IF-EVL-NEXT:    [[TMP17:%.*]] = getelementptr inbounds i32, ptr [[TMP16]], i32 0
 ; IF-EVL-NEXT:    call void @llvm.vp.store.nxv4i32.p0(<vscale x 4 x i32> [[TMP15]], ptr align 4 [[TMP17]], <vscale x 4 x i1> shufflevector (<vscale x 4 x i1> insertelement (<vscale x 4 x i1> poison, i1 true, i64 0), <vscale x 4 x i1> poison, <vscale x 4 x i32> zeroinitializer), i32 [[TMP9]])
@@ -853,3 +853,23 @@ declare i32 @llvm.cttz.i32(i32, i1 immarg)
 declare i64 @llvm.lrint.i64.f64(double)
 declare i64 @llvm.llrint.i64.f64(double)
 declare i32 @llvm.abs.i32(i32, i1 immarg)
+;.
+; IF-EVL: [[LOOP0]] = distinct !{[[LOOP0]], [[META1:![0-9]+]], [[META2:![0-9]+]]}
+; IF-EVL: [[META1]] = !{!"llvm.loop.isvectorized", i32 1}
+; IF-EVL: [[META2]] = !{!"llvm.loop.unroll.runtime.disable"}
+; IF-EVL: [[LOOP3]] = distinct !{[[LOOP3]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP4]] = distinct !{[[LOOP4]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP5]] = distinct !{[[LOOP5]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP6]] = distinct !{[[LOOP6]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP7]] = distinct !{[[LOOP7]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP8]] = distinct !{[[LOOP8]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP9]] = distinct !{[[LOOP9]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP10]] = distinct !{[[LOOP10]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP11]] = distinct !{[[LOOP11]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP12]] = distinct !{[[LOOP12]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP13]] = distinct !{[[LOOP13]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP14]] = distinct !{[[LOOP14]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP15]] = distinct !{[[LOOP15]], [[META2]], [[META1]]}
+; IF-EVL: [[LOOP16]] = distinct !{[[LOOP16]], [[META1]], [[META2]]}
+; IF-EVL: [[LOOP17]] = distinct !{[[LOOP17]], [[META2]], [[META1]]}
+;.
