@@ -694,7 +694,8 @@ public:
   bool isFRMArgLegacy() const { return Kind == KindTy::FRM; }
   bool isRTZArg() const { return isFRMArg() && FRM.FRM == RISCVFPRndMode::RTZ; }
 
-  // Return true if the operand is a valid SpacemiT's Integer Matrix VType(i4/i8)
+  // Return true if the operand is a valid SpacemiT's Integer Matrix
+  // VType(i4/i8).
   bool isSMTVType() const {
     return Kind == KindTy::SMTVType &&
            XSMTVTypeMode::isValidSMTVTypeMode(SMTVType.SMTVType);
