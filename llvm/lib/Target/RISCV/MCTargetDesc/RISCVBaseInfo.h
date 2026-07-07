@@ -152,7 +152,7 @@ enum OperandType : unsigned {
 // RISCVII - This namespace holds all of the target specific flags that
 // instruction info tracks. All definitions must match RISCVInstrFormats.td.
 namespace RISCVII {
-enum {
+enum : uint64_t {
   InstFormatPseudo = 0,
   InstFormatR = 1,
   InstFormatR4 = 2,
