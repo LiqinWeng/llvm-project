@@ -1425,8 +1425,6 @@ static MCRegister convertVRToVRMx(const MCRegisterInfo &RI, MCRegister Reg,
   unsigned RegClassID;
   if (Kind == MCK_VRM2)
     RegClassID = RISCV::VRM2RegClassID;
-  else if (Kind == MCK_VRM2NoV0)
-    RegClassID = RISCV::VRM2NoV0RegClassID;
   else if (Kind == MCK_VRM4)
     RegClassID = RISCV::VRM4RegClassID;
   else if (Kind == MCK_VRM8)
@@ -1501,8 +1499,7 @@ unsigned RISCVAsmParser::validateTargetOperandClass(MCParsedAsmOperand &AsmOp,
 
   // As the parser couldn't differentiate an VRM2/VRM4/VRM8 from an VR, coerce
   // the register from VR to VRM2/VRM4/VRM8 if necessary.
-  if (IsRegVR && (Kind == MCK_VRM2 || Kind == MCK_VRM2NoV0 ||
-                  Kind == MCK_VRM4 || Kind == MCK_VRM8)) {
+  if (IsRegVR && (Kind == MCK_VRM2 || Kind == MCK_VRM4 || Kind == MCK_VRM8)) {
     Op.Reg.Reg = convertVRToVRMx(*getContext().getRegisterInfo(), Reg, Kind);
     if (!Op.Reg.Reg)
       return Match_InvalidOperand;

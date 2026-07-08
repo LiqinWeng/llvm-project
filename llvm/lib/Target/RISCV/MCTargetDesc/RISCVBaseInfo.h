@@ -569,7 +569,7 @@ enum SMTVTypeMode {
 inline static StringRef SMTVTypeModeToString(SMTVTypeMode TypeMode) {
   switch (TypeMode) {
   default:
-    llvm_unreachable("Unknown VType's mode of SpacemiT Integer Matrix");
+    llvm_unreachable("Unknown VType mode of SpacemiT Integer Matrix");
   case XSMTVTypeMode::SMT_I4:
     return "i4";
   case XSMTVTypeMode::SMT_I8:
