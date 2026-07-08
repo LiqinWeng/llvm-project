@@ -93,7 +93,7 @@ def SMTI8 : AsmOperandClass {
   let DefaultMethod = "defaultSMTVType";
 }
 
-def SMT_I8  : Operand<XLenVT> {
+def SMT_I8 : Operand<XLenVT> {
   let ParserMatchClass = SMTI8;
   let PrintMethod = "printSMTVType";
   let DecoderMethod = "decodeUImmOperand<2>";
