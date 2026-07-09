@@ -99,7 +99,7 @@ smt.vfwmadot v2, v4, v3
 // CHECK-ERROR: :[[@LINE-1]]:14: error: the destination vector register group cannot overlap the source vector register group{{$}}
 
 smt.vfwmadot v4, v2, v3, i8
-// CHECK-ERROR: :[[@LINE-1]]:26: error: invalid operand for instruction{{$}}
+// CHECK-ERROR: :[[@LINE-1]]:26: error: unexpected extra operand for instruction{{$}}
 
 smt.vfwmadot1 v3, v2, v4
 // CHECK-ERROR: :[[@LINE-1]]:15: error: invalid operand for instruction{{$}}
@@ -120,7 +120,7 @@ smt.vfwmadot1 v2, v4, v3
 // CHECK-ERROR: :[[@LINE-1]]:15: error: the destination vector register group cannot overlap the source vector register group{{$}}
 
 smt.vfwmadot1 v0, v2, v4, i8
-// CHECK-ERROR: :[[@LINE-1]]:27: error: invalid operand for instruction{{$}}
+// CHECK-ERROR: :[[@LINE-1]]:27: error: unexpected extra operand for instruction{{$}}
 
 smt.vnpack.vv v3, v3, v5, 1
 // CHECK-ERROR: :[[@LINE-1]]:15: error: the destination vector register group cannot overlap the source vector register group{{$}}
