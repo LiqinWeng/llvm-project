@@ -4362,7 +4362,7 @@ bool RISCVAsmParser::validateInstruction(MCInst &Inst,
         if ((RegEnc + i) == MaskEnc) {
           SMLoc Loc = Operands[Idx]->getStartLoc();
           return Error(Loc, Twine("register conflicts with vmask register ") +
-                                (MaskReg == RISCV::V0 ? "v0" : "v1"));
+                                RISCVInstPrinter::getRegisterName(MaskReg));
         }
       }
     }
