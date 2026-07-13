@@ -1857,12 +1857,12 @@ def HasVendorXSMTVDot
                          "'XSMTVDot' (SpacemiT Vector Dot Product Extension)">;
 
 def FeatureVendorXSMTVDotII
-    : RISCVExtension<1, 0, "SpacemiT Vector Extension for Matrix(2.0)",
+    : RISCVExtension<1, 0, "SpacemiT Vector Extension for Matrix 2.0",
                      [FeatureStdExtZve32f]>;
 def HasVendorXSMTVDotII
     : Predicate<"Subtarget->hasVendorXSMTVDotII()">,
       AssemblerPredicate<(all_of FeatureVendorXSMTVDotII),
-                         "'XSMTVDotII' (SpacemiT Vector Extension for Matrix(2.0))">;
+                         "'XSMTVDotII' (SpacemiT Vector Extension for Matrix 2.0)">;
 
 def FeatureVendorXAIFET
     : RISCVExtension<1, 0, "AI Foundry ET Extension", [FeatureStdExtF]>;
